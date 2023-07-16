@@ -25,7 +25,7 @@ function App() {
           <FriendsList />
         </Route>
         <Route exact path="/friends_add" > 
-        {localStorage.getItem("token") ? <AddFriend /> : <Redirect to="/login" replace></Redirect>}
+        <AddFriend></AddFriend>
         </Route>
         <Route exact path="/logout" > 
         {localStorage.getItem("token") ? <Logout /> : <Redirect to="/login" replace></Redirect>}

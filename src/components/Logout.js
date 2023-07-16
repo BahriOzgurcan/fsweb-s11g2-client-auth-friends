@@ -1,6 +1,13 @@
+import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { API, updateToken } from "../api/api";
+import { useState, useEffect } from "react";
+import Login from "./Login";
 
 const Logout = () => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const history = useHistory();
 
   const logoutHandler = (e) => {
     e.preventDefault()
@@ -8,16 +15,20 @@ const Logout = () => {
       .post("logout")
       .then((res) => {
         localStorage.removeItem("token");
-        // updateToken(res.data.token);
+        history.push("/login")
       })
       .catch((err) => {
         console.log(err);
       })
   }
 
+  useEffect(()=>{
+    localStorage.getItem("token") && setIsLoggedIn(true)
+  }, [])
+
   return (
     <>
-      <button onClick={logoutHandler}>Logout</button>
+      {isLoggedIn ? <button onClick={logoutHandler}>Logout</button> : <Login/>}
     </>
   );
 };

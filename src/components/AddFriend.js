@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { API } from "../api/api";
 import { updateToken } from "../api/api";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -9,7 +9,7 @@ const AddFriend = () => {
     email: "",
   });
 
-  const history = useHistory()
+  const history = useHistory();
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
@@ -18,15 +18,15 @@ const AddFriend = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    
+
     API.post("friends", newUser)
-    .then((res)=> {
-      updateToken(res.data.token);
-      history.push("/friends")
-    })
-    .catch((err) => {
-      console.log(err.response.data.error)
-    })
+      .then((res) => {
+        updateToken(res.data.token);
+        history.push("/friends");
+      })
+      .catch((err) => {
+        console.log(err.response.data.error);
+      });
 
     setNewUser({
       username: "",
@@ -34,19 +34,18 @@ const AddFriend = () => {
     });
   };
 
+  useEffect(() => {
+    const loadedToken = localStorage.getItem("token");
+    if(!loadedToken){
+      history.push("/login")
+    }
+  });
+
   return (
     <>
       <form onSubmit={submitHandler}>
-        <input
-          onChange={changeHandler}
-          type="text"
-          name="name"
-        />
-        <input
-          onChange={changeHandler}
-          type="email"
-          name="email"
-        />
+        <input onChange={changeHandler} type="text" name="name" />
+        <input onChange={changeHandler} type="email" name="email" />
         <button type="submit">Add friend</button>
       </form>
     </>
